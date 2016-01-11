@@ -32,13 +32,13 @@ class DouBanMovies:
         dest_filename = 'Douban_top250.xlsx'
         ws = wb.active
         ws.title = "Douban_250"
-        ws.cell(row=1, column=1, value='rank')
-        ws.cell(row=1, column=2, value='name')
-        ws.cell(row=1, column=3, value='director')
-        ws.cell(row=1, column=4, value='date')
-        ws.cell(row=1, column=5, value='rate')
-        ws.cell(row=1, column=6, value='country')
-        ws.cell(row=1, column=7, value='classification')
+        ws.cell(row=1, column=1, value='Rank')
+        ws.cell(row=1, column=2, value='Name')
+        ws.cell(row=1, column=3, value='Director')
+        ws.cell(row=1, column=4, value='Date')
+        ws.cell(row=1, column=5, value='Rate')
+        ws.cell(row=1, column=6, value='Country')
+        ws.cell(row=1, column=7, value='Classification')
         for start in range(0, 250, 25):
             soup = BeautifulSoup(self.movies_info(str(start)), "html.parser")
             all_info = soup.ol.find_all('li')
