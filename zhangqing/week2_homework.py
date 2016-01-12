@@ -44,23 +44,23 @@ class DouBanMovies:
             all_info = soup.ol.find_all('li')
             for each_item in all_info:
                 self.movies_rank = each_item.find('em').contents[0]
-                self.movies_name = each_item.find('span', attrs={'class': 'title'}).contents[0]
+                self.movies_name = each_item.find('span', attrs={'class': 'title'}).contents[0].strip()
                 self.each_info_director = each_item.p.contents[0]
                 # print(self.each_movies_info)
                 director_info = re.findall('导演: (.*)', self.each_info_director)
                 for self.movies_director in director_info:
                     if "主" in self.movies_director:
-                        self.movies_director = re.findall('导演: (.*)主', self.each_info_director)[0]
+                        self.movies_director = re.findall('导演: (.*)主', self.each_info_director)[0].strip()
                     else:
-                        self.movies_director = director_info[0]
+                        self.movies_director = director_info[0].strip()
                 self.each_info_date = each_item.p.contents[1].text.replace('\n', '').strip()
                 # print(self.each_info_date)
                 movies_info = self.each_info_date.split('/')
                 # print(movies_info)
-                self.movies_date = movies_info[-3]
+                self.movies_date = '/'.join(movies_info[0:-2])
                 self.movies_rate = each_item.find('span', attrs={'class': 'rating_num'}).contents[0]
-                self.movies_country = movies_info[-2]
-                self.movies_classification = movies_info[-1]
+                self.movies_country = movies_info[-2].strip()
+                self.movies_classification = movies_info[-1].strip()
                 print(self.movies_rank, self.movies_name, self.movies_director, self.movies_date, self.movies_rate,
                       self.movies_country, self.movies_classification)
                 ws.cell(row=int(self.movies_rank) + 1, column=1, value=self.movies_rank)
