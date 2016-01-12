@@ -19,7 +19,8 @@
 1. Libs：  
 HTMLParser，Python自带的Html解析工具  
 Beautiful Soup，更好用的Html解析工具：**推荐**  
-xlrd，Python操作Excel的工具
+xlrd，Python操作Excel的工具  
+openpyxl, 更好用的Excel工具：**推荐**  
 
 2. Sample：  
 Please google or baidu
