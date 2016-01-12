@@ -2,6 +2,7 @@
 import requests
 from bs4 import BeautifulSoup
 import xlwt
+from openpyxl import Workbook
 
 URL = 'http://movie.douban.com/top250'
 
@@ -35,19 +36,30 @@ def get_every_info(data):
 if __name__ == '__main__':
 
     def write_to_excel(i, name, director, region, year, star, category):
-        sheet.write(i, 0, str(name))
-        sheet.write(i, 1, str(director))
-        sheet.write(i, 2, str(region))
-        sheet.write(i, 3, str(year))
-        sheet.write(i, 4, str(star))
-        sheet.write(i, 5, str(category))
+        i = str(i + 2)
+        ws['A' + i] = str(i)
+        ws['B' + i] = str(name)
+        ws['C' + i] = str(director)
+        ws['D' + i] = str(region)
+        ws['E' + i] = str(year)
+        ws['F' + i] = str(star)
+        ws['G' + i] = str(category)
 
 
-    wbk = xlwt.Workbook(encoding='utf-8', style_compression=0)
-    sheet = wbk.add_sheet('movie', cell_overwrite_ok=True)
+    wb = Workbook()
+    ws = wb.active
+
+    ws['A1'] = '序号'
+    ws['B1'] = '电影名称'
+    ws['C1'] = '导演'
+    ws['D1'] = '地区'
+    ws['E1'] = '上映时间'
+    ws['F1'] = '评分'
+    ws['G1'] = '类型'
+
     infos = []
     for i in range(0, 250, 25):
         infos.extend(get_every_info(get_a_page(i)))
     for i in range(0, len(infos)):
         write_to_excel(i, infos[i][0], infos[i][1], infos[i][2], infos[i][3], infos[i][4], infos[i][5])
-    wbk.save('movie.xls')
+    wb.save('movie.xlsx')
