@@ -1,0 +1,57 @@
+# -*- coding:utf-8 -*-'
+
+import string
+import re
+import requests
+import urllib
+from bs4 import BeautifulSoup
+
+class DouBanSpider(object):
+    def __init__(self):
+        self.page = 1
+        self.cur_url = "http://movie.douban.com/top250?start={page}&filter=&type="
+        self.datas = []
+        self._top_num = 1
+
+    def get_page(self, cur_page):
+        url = self.cur_url.format(page=(cur_page - 1) * 25)
+        my_page = requests.get(url).content
+        return my_page
+
+    def find_title(self, data):
+        temp_data = []
+        soup = BeautifulSoup(data,"html.parser")
+        lis = soup.ol.findAll('li')
+        for li in lis:
+            name = li.find('span', attrs={'class': 'title'}).text
+            star = li.find('span', attrs={'class': 'rating_num'}).text
+            info = li.find('div', attrs={'class': 'bd'}).text
+
+            infos = [x.strip() for x in info.strip().split('\n') if len(x) > 0]
+            infos = [x for x in infos if len(x) > 0]
+
+            director = infos[0].split('导演:')[1].split('主演')[0]
+ #           role=infos[0].split('主演')[1].split('/')[0]
+            year = infos[1].split('/')[0]
+            region = infos[1].split('/')[1]
+            category = infos[1].split('/')[2]
+
+
+            print("name: %s, star: %s,director: %s,year: %s,region: %s,category: %%s" % (str(name), str(star), str(director),str(year),str(region)),str(category))
+            temp_data.append((name, star, director,year,region,category))
+
+        return temp_data
+
+
+    def start_spider(self):
+        infos = []
+        while self.page <= 11:
+            infos.extend(self.find_title(self.get_page(self.page)))
+            self.page += 1
+        #return infos
+        print(infos)
+
+
+if __name__ == '__main__':
+    d = DouBanSpider()
+    d.start_spider()
